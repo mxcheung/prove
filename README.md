@@ -3,6 +3,8 @@
 
 https://perlmaven.com/testing-a-simple-perl-module
 
+perl -Ilib t/lib/Math.t
+
 prove -l t/lib/Math.t
 
 MAX@MAX-PC MINGW64 /e/git/prove (master)
