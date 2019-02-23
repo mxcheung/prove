@@ -1,0 +1,31 @@
+rem https://github.com/sonar-perl/sonar-perl
+rem run ==> D:\SOFTWARE\sonar-scanner-3.3.0.1492-windows\bin\sonar-scanner
+rem start services sonarqube
+rem D:\SOFTWARE\sonarqube-7.6\sonarqube-7.6\bin\windows-x86-64\StartSonar.bat
+rem D:\SOFTWARE\sonarqube-7.6\sonarqube-7.6\logs
+rem SET PATH=%PATH%;D:\SOFTWARE\sonarqube-7.6\sonarqube-7.6\bin\windows-x86-64\;D:\SOFTWARE\sonar-runner-2.4\bin;
+rem D:\SOFTWARE\sonar-scanner-3.3.0.1492-windows\bin
+SET PATH=%PATH%;D:\SOFTWARE\sonar-scanner-3.3.0.1492-windows\bin;D:\SOFTWARE\Perl-Critic-1.132\bin;
+rem D:\SOFTWARE\Perl-Critic-1.132\bin\perlcritic
+rem perl -version
+rem perlcritic --cruel --quiet --verbose "%f~|~%s~|~%l~|~%c~|~%m~|~%e~|~%p~||~%n" lib t > perlcritic_report.txt
+
+rem TAP::Harness::Archive 
+rem perl -MDevel::Cover -test
+rem prove -t -r -a  testReport.tgz
+rem cover -test -report clover
+rem cover  -report clover
+
+Writing clover output file to 'D:\sonar\www\cover_db/clover.xml'...
+No such file or directory at C:/Strawberry/perl/site/lib/Devel/Cover/Report/Clover/Builder.pm
+rem https://docs.sonarqube.org/display/SONARQUBE45/Clover+Plugin
+
+
+rem 1.   perlcritic --cruel --quiet --verbose "%f~|~%s~|~%l~|~%c~|~%m~|~%e~|~%p~||~%n" lib t > perlcritic_report.txt
+rem 2.   perl -MDevel::Cover t\lib\Foo.t
+rem 3.   cover  -report clover
+rem 4.   prove -r -t -a testReport.tgz
+rem 5.   D:\SOFTWARE\sonar-scanner-3.3.0.1492-windows\bin\sonar-scanner
+
+
+
