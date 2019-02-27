@@ -29,5 +29,7 @@ sub index_doc {
 	print "$index->{index}\n";
 	print "$index->{body}->{content}\n";
 	print "$index->{body}->{title}\n";
+	$self->{index} = $index;
+	print "self:: $self->{index}->{body}->{title}\n";
 }
 1;
