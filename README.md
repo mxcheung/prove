@@ -13,3 +13,7 @@ t/01_compute.t .. ok
 All tests successful.
 Files=1, Tests=2,  0 wallclock secs ( 0.16 usr  0.14 sys +  0.05 cusr  0.08 csys =  0.42 CPU)
 Result: PASS
+
+
+https://randu.org/tutorials/perl/records.php
+https://metacpan.org/pod/Search::Elasticsearch
