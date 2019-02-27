@@ -6,7 +6,12 @@ use Data::Dumper;
 
 sub new {
 	my ( $class, %args ) = @_;
-	my $self = { base_dir => $args{'base_dir'} };
+	my %repo;
+	$repo{'apple'} = 'red';
+	$repo{'banana'} = 'yellow';
+	my $self = { base_dir => $args{'base_dir'},
+	             repo => \%repo
+               };
 
 	print Dumper( \%args );
 	print "$args{'High'}\n";
@@ -15,17 +20,30 @@ sub new {
 }
 
 sub index_doc {
-	my ( $self, $index ) = @_;
+	my ( $self, $request ) = @_;
 
 	print "indexing document ........\n";
-	print Dumper( \$index );
-	print "$index->{type}\n";
-	print "$index->{index}\n";
-	print "$index->{body}->{content}\n";
-	print "$index->{body}->{title}\n";
-	$self->{index} = $index;
-	print "self:: $self->{index}->{body}->{title}\n";
-	return;
+	print Dumper( \$request );
+	$self->{request} = $request;
+	print "self:: $self->{request}->{body}->{title}\n";
+	my $index = $request->{index};
+	my $id = $request->{id};
+	my $key = $index.'-' . $id;
+	my $body = $request->{body};
+	
+	$self->{'repo'}->{$key} = $body;
+	return $self;
+}
+
+sub get_doc {
+	my ( $self, $request ) = @_;
+	my $index = $request->{index};
+	my $id = $request->{id};
+	my $key = $index.'-' . $id;
+	print "getting document ........\n";
+	my $body = $self->{'repo'}->{$key}; 
+	print Dumper( \$body );
+	return $body;
 }
 
 1;
