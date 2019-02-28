@@ -18,6 +18,8 @@ sub main {
    test_object_creation();
    test_index_document();
    test_get_document();
+   test_serialize();
+   test_deserialize();
    return;
 }
 
@@ -71,6 +73,44 @@ sub test_get_document {
    $self->{filerepo}->get_doc($get);
  
  return;
+}
+
+sub test_serialize {
+ note('Test serialize');
+ my $filerepo = FileIdempRepo->new( 'base_dir' => 'c:\\temp\\repo', 'High' => 42, 'Low' => 11 );
+	 my $index = {
+	  index => 'my_app',
+	  type  => 'blog_post',
+	  id    => 1,
+	  body  => {
+	   title   => 'Elasticsearch clients',
+	   content => 'Interesting content...',
+	   date    => '2013-09-24'
+	  }
+	 };
+   my $expected = "index=my_apptype=blog_postid=1title=Elasticsearch clientsdate=2013-09-24SW50ZXJlc3RpbmcgY29udGVudC4uLg==";
+   my $got = $filerepo->serialize($index);
+   is  ($got, $expected, "test deserialized data");
+   return;
+}
+
+sub test_deserialize {
+ note('Test deserialize');
+ my $filerepo = FileIdempRepo->new( 'base_dir' => 'c:\\temp\\repo', 'High' => 42, 'Low' => 11 );
+	 my $index = {
+	  index => 'my_app',
+	  type  => 'blog_post',
+	  id    => 1,
+	  body  => {
+	   title   => 'Elasticsearch clients',
+	   content => 'Interesting content...',
+	   date    => '2013-09-24'
+	  }
+	 };
+   my $got = $filerepo->deserialize($index);
+   my $expected = $index;
+   is_deeply  ($got, $expected);
+   return;
 }
 
 
