@@ -40,7 +40,7 @@ sub index_doc {
     my $file =  $base_dir."\\file.txt";
     open(my $fd, ">>$file") or die "Couldn't open: $!";
 	my $data = serialize($self, $request);
-    print $fd $data;
+    print $fd "$data\n";
     close $fd;
 	return $self;
 }
