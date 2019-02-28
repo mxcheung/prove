@@ -36,6 +36,12 @@ sub index_doc {
 	my $body = $request->{body};
 	
 	$self->{'repo'}->{$key} = $body;
+    my $base_dir = $self->{base_dir};
+    my $file =  $base_dir."\\file.txt";
+    open(my $fd, ">>$file") or die "Couldn't open: $!";
+	my $data = serialize($self, $request);
+    print $fd $data;
+    close $fd;
 	return $self;
 }
 

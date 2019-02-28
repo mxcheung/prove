@@ -28,6 +28,9 @@ sub test_object_creation {
    my $obj = FileIdempRepo->new( 'base_dir' => 'c:\\temp\\repo', 'High' => 42, 'Low' => 11 );
    isa_ok( $obj, 'FileIdempRepo' );
    is( ref($obj), 'FileIdempRepo', "Reference Type is Record." );
+   my $expected = "c:\\temp\\repo";
+   my $got = $obj->{base_dir};
+   is  ($got, $expected, "test base_dir is set");
    return;
 }
 
