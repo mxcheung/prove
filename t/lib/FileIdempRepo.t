@@ -21,7 +21,7 @@ sub main {
   # test_serialize();
    test_deserialize();
   # test_find_lines();
-  # test_convert_lines();
+   test_convert_lines();
    return;
 }
 
@@ -136,10 +136,10 @@ sub test_convert_lines {
  my $filerepo = FileIdempRepo->new( 'base_dir' => 'c:\\temp\\repo', 'High' => 42, 'Low' => 11 );
  my $base_dir = 'c:\\temp\\repo';
  my $file =  $base_dir."\\file.txt";
-  my $keyword = SOH."id=2".SOH;
+  my $keyword = SOH."id=3".SOH;
  my @lines = $filerepo->find_lines($file, $keyword);
-  my @data = $filerepo->convert_lines($file, @lines);
-# print Dumper( \@data );
+ my @data = $filerepo->convert_lines(@lines);
+ print Dumper( \@data );
  
  return;
 }

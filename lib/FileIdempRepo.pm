@@ -52,7 +52,7 @@ sub find_lines {
     open my $fh, '<:encoding(UTF-8)', $file or die;
     while (my $line = <$fh>) {
         if ($line =~ /$keyword/) {
-            print $line;
+         #   print $line;
             push @lines, $line;
         }
     }
@@ -64,8 +64,8 @@ sub convert_lines {
    my ( $self, @lines) = @_;
    my @data;
    for my $line (@lines) {
-      print "$line\n";
-      my $obj =  deserialize($line);
+  #    print "$line\n";
+      my $obj =  deserialize($self, $line);
       push @data, $obj;
 
     }
@@ -110,7 +110,7 @@ sub deserialize {
 	   date    => $elements{date}
 	  }
 	 };
-    print Dumper( \$request );
+ #   print Dumper( \$request );
     return $request;
 }
 
