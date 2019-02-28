@@ -4,7 +4,6 @@ use warnings;
 use 5.010;
 use Data::Dumper;
 use MIME::Base64;
-
 use constant   SOH   =>  "\x01";
 
 
@@ -42,8 +41,37 @@ sub index_doc {
 	my $data = serialize($self, $request);
     print $fd "$data\n";
     close $fd;
+    my $keyword = SOH."id=2".SOH;
+    find_lines($self, $file, $keyword);
 	return $self;
 }
+
+sub find_lines {
+   my @lines;
+   my ( $self, $file, $keyword) = @_;
+    open my $fh, '<:encoding(UTF-8)', $file or die;
+    while (my $line = <$fh>) {
+        if ($line =~ /$keyword/) {
+            print $line;
+            push @lines, $line;
+        }
+    }
+    close $fh;
+    return @lines;
+}
+
+sub convert_lines {
+   my ( $self, @lines) = @_;
+   my @data;
+   for my $line (@lines) {
+      print "$line\n";
+      my $obj =  deserialize($line);
+      push @data, $obj;
+
+    }
+    return @data;
+}
+
 
 sub get_doc {
 	my ( $self, $request ) = @_;
@@ -65,34 +93,24 @@ sub serialize {
 	my $content = $request->{body}->{content};
 	my $encoded = encode_base64($content, "");
 	my $date = $request->{body}->{date};
-#	print "zzzzzzzzzzzzzzzzzzzzzzz\n";
-#	print "$index\n";
-#	print "$type\n";
-	my $data = "index=".$index.SOH."type=".$type.SOH."id=".$id.SOH."title=".$title.SOH."date=".$date.SOH.$encoded;
-#	print "$data\n";
-#	print "zzzzzzzzzzzzzzzzzzzzzzz\n";
+	my $data = "index=".$index.SOH."type=".$type.SOH."id=".$id.SOH."title=".$title.SOH."date=".$date.SOH."content=".$encoded;
     return $data;
 }
 
 sub deserialize {
-    my $data  = shift; 
-    
-    my @pieces = split /\x01/, $data;
-    
-    my $request = {
-	  index => 'my_app',
-	  type  => 'blog_post',
-	  id    => 1,
+   my ( $self, $line ) = @_;
+   my %elements = map{split /\=/, $_}(split /\x01/, $line);
+   my $request = {
+	  index => $elements{index},
+	  type  =>  $elements{type},
+	  id    => $elements{id},
 	  body  => {
-	   title   => 'Elasticsearch clients',
-	   content => 'Interesting content...',
-	   date    => '2013-09-24'
+	   title   =>  $elements{title},
+	   content => decode_base64($elements{content}),
+	   date    => $elements{date}
 	  }
 	 };
-  #  my $request = "";
-  #  my $index = $request->{index};
-#	my $id = $request->{id};
-	
+    print Dumper( \$request );
     return $request;
 }
 

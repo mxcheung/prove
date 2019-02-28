@@ -6,20 +6,22 @@ use Test::More;
 
 use FindBin;
 use lib "$FindBin::Bin/../../lib";
-
+use Data::Dumper;
 use FileIdempRepo;
 
-
+use constant   SOH   =>  "\x01";
 
 main();
 
 sub main {
 
-   test_object_creation();
-   test_index_document();
-   test_get_document();
-   test_serialize();
+  # test_object_creation();
+  # test_index_document();
+  # test_get_document();
+  # test_serialize();
    test_deserialize();
+  # test_find_lines();
+  # test_convert_lines();
    return;
 }
 
@@ -41,7 +43,7 @@ sub test_index_document {
  my $index = {
   index => 'my_app',
   type  => 'blog_post',
-  id    => 1,
+  id    => 3,
   body  => {
    title   => 'Elasticsearch clients',
    content => 'Interesting content...',
@@ -91,7 +93,7 @@ sub test_serialize {
 	   date    => '2013-09-24'
 	  }
 	 };
-   my $expected = "index=my_apptype=blog_postid=1title=Elasticsearch clientsdate=2013-09-24SW50ZXJlc3RpbmcgY29udGVudC4uLg==";
+   my $expected = "index=my_apptype=blog_postid=1title=Elasticsearch clientsdate=2013-09-24content=SW50ZXJlc3RpbmcgY29udGVudC4uLg==";
    my $got = $filerepo->serialize($index);
    is  ($got, $expected, "test deserialized data");
    return;
@@ -110,13 +112,37 @@ sub test_deserialize {
 	   date    => '2013-09-24'
 	  }
 	 };
-   my $got = $filerepo->deserialize($index);
+   my $line = "index=my_apptype=blog_postid=1title=Elasticsearch clientsdate=2013-09-24content=SW50ZXJlc3RpbmcgY29udGVudC4uLg==";
+   my $got = $filerepo->deserialize($line);
    my $expected = $index;
    is_deeply  ($got, $expected);
    return;
 }
 
+sub test_find_lines {
+ note('Test find lines document');
+ my $filerepo = FileIdempRepo->new( 'base_dir' => 'c:\\temp\\repo', 'High' => 42, 'Low' => 11 );
+ my $base_dir = 'c:\\temp\\repo';
+ my $file =  $base_dir."\\file.txt";
+  my $keyword = SOH."id=2".SOH;
+ my @lines = $filerepo->find_lines($file, $keyword);
+# print Dumper( \@lines );
+ 
+ return;
+}
 
+sub test_convert_lines {
+ note('Test find lines document');
+ my $filerepo = FileIdempRepo->new( 'base_dir' => 'c:\\temp\\repo', 'High' => 42, 'Low' => 11 );
+ my $base_dir = 'c:\\temp\\repo';
+ my $file =  $base_dir."\\file.txt";
+  my $keyword = SOH."id=2".SOH;
+ my @lines = $filerepo->find_lines($file, $keyword);
+  my @data = $filerepo->convert_lines($file, @lines);
+# print Dumper( \@data );
+ 
+ return;
+}
 
 done_testing();
 
