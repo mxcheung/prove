@@ -1,0 +1,12 @@
+Item,Tag,Qualifier,Field Name,Parameters,Comments 
+1,:20C: ,CORP ,Corporate action reference,,
+2,:22F: ,CAEV ,Corporate action event indicator,,
+3,:22F: ,CAMV ,Mandatory/voluntary indicator,,
+4,:98A: ,ANOU,Announcement date,,
+5,:98A: ,RDTE ,Record date,,
+998,:98A: ,ANOU,Announcement date,,
+998,:98A: ,XDTE ,Ex-dividend or distribution date,,
+998,:98A: ,MEET,Meeting date ,,
+998,:98A: ,RDTE ,Record date,,
+999,,,ResponseRequired,,
+999,,ANOU,Announcement date,7,
