@@ -31,23 +31,20 @@ sub test_load_data {
  my $obj = MT564->new( 'base_dir' => 'c:\\temp\\repo' );
  isa_ok( $obj, 'MT564' );
  my @rows = $obj->load_data( { 'base_dir' => 'c:\\temp\\repo' } );
- print "===================================";
- print Dumper( \@rows );
- print "===================================";
- my %swift_msg = (
-  "Corporate action reference"       => "CA1234",
-  "Corporate action event indicator" => "MEET",
-  "Mandatory/voluntary indicator"    => "MAND",
-  "Meeting date"                     => "20190316",
-  "Announcement date"                => "20190312",
-  "Record date"                      => "20190318",
-  "Ex-dividend or distribution date" => "20190516",
- );
+# print "===================================";
+# print Dumper( \@rows );
+
+ 
+  my %swift_msg = %{$obj->swift_msg( { 'dummy' => 'dummy' } )};
+ 
+ 
  my $rows      = \@rows;
  my $swift_msg = \%swift_msg;
 
- print "=========  main sectiib ==========================\n";
- my @filteredrows = $obj->enrich_data( { rows => $rows, swift_msg => $swift_msg } );
+ my @rows = $obj->enrich_data( { rows => $rows, swift_msg => $swift_msg } );
+
+ print "=========  main section ==========================\n";
+ my @filteredrows = $obj->main_section( { rows => \@rows } );
  print Dumper(@filteredrows);
  
  print "=========  response_date ==========================\n";

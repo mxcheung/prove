@@ -29,8 +29,8 @@ sub load_data {
  $csv->column_names( $csv->getline($fh) );    # use header
  my @rows = ();
  while ( my $row = $csv->getline_hr($fh) ) {
-  printf "Tag: %-32s Qualifier: %s Field Name: %s\n",
-    $row->{Tag}, $row->{Qualifier}, $row->{'Field Name'};
+#  printf "Tag: %-32s Qualifier: %s Field Name: %s\n",
+#    $row->{Tag}, $row->{Qualifier}, $row->{'Field Name'};
   push @rows, $row;
  }
  close $fh;
@@ -38,19 +38,60 @@ sub load_data {
  return @rows;
 }
 
+sub swift_msg {
+ my ( $self, $params ) = @_;
+ 
+  my %swift_msg = (
+  "Corporate action reference"       => corporate_action_reference(),
+  "Corporate action event indicator" => corporate_action_event_indicator(),
+  "Mandatory/voluntary indicator"    => "MAND",
+  "Meeting date"                     => "20190316",
+  "Announcement date"                => announcement_date(),
+  "Record date"                      => record_date(),
+  "Ex-dividend or distribution date" => ex_date(),
+ );
+ return \%swift_msg;
+}
+
+sub corporate_action_event_indicator {
+ return "MEET";
+}
+
+
+sub corporate_action_reference {
+ return "CA1235";
+}
+
+sub record_date {
+ return "20190717";
+}
+
+sub ex_date {
+ return "20190521";
+}
+
+sub announcement_date {
+ return "20190315";
+}
+
+
 sub enrich_data {
  my ( $self, $params ) = @_;
  my @rows      = @{ $params->{rows} };
  my %swift_msg = %{ $params->{swift_msg} };
-# my @filteredrows = filter_main_section( $params->{rows}, 999  );
  foreach my $row (@rows) {
   my $key = $row->{'Field Name'};
   $row->{'Field Value'} = $swift_msg{$key};
  }
- print "=========enrich rows==========================";
- print Dumper(@rows);
  return @rows;
 }
+
+sub main_section {
+ my ( $self, $params ) = @_;
+ my @filteredrows = filter_main_section( $params->{rows}, 800  );
+ return @filteredrows;
+}
+
 
 sub response_date {
  my ( $self, $params ) = @_;
