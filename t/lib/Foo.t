@@ -21,9 +21,7 @@ sub test_object_creation {
 	note('Test Object Creation');
 	my $obj = Foo->new( 'High' => 42, 'Low' => 11 );
 	isa_ok( $obj, 'Foo' );
-
 	is( ref($obj), 'Foo', "Reference Type is Record." );
-
 }
 
 sub test_foo_array {

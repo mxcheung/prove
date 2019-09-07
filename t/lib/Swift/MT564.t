@@ -13,17 +13,16 @@ use Swift::MT564;
 main();
 
 sub main {
- test_object_creation();
- test_load_data();
-
- return;
+     test_object_creation();
+     test_load_data();
+     return;
 }
 
 sub test_object_creation {
- note('Test Object Creation');
- my $obj = MT564->new( 'base_dir' => 'c:\\temp\\repo' );
- isa_ok( $obj, 'MT564' );
- return;
+    note('Test Object Creation');
+    my $obj = MT564->new( 'base_dir' => 'c:\\temp\\repo' );
+    isa_ok( $obj, 'MT564' );
+    return;
 }
 
 sub test_load_data {
